@@ -1,8 +1,10 @@
 import requests
 import datetime
+import pytz
+import os
 
-TOKEN = "TU_TOKEN_AQUI"
-CHAT_ID = "TU_CHAT_ID_AQUI"
+TOKEN = os.getenv("TOKEN")
+CHAT_ID = os.getenv("CHAT_ID")
 
 def obtener_festivos():
     año = datetime.date.today().year
@@ -17,14 +19,25 @@ def enviar_mensaje(texto):
     requests.post(url, params=params)
 
 def verificar_festivos():
-    hoy = datetime.date.today()
+    # Obtener hora de Colombia
+    tz = pytz.timezone("America/Bogota")
+    hoy = datetime.datetime.now(tz).date()
+
     festivos = obtener_festivos()
 
     for festivo in festivos:
         fecha_festivo = datetime.datetime.strptime(festivo["date"], "%Y-%m-%d").date()
+
+        # Si falta 1 día
         if (fecha_festivo - hoy).days == 1:
             nombre = festivo["localName"]
-            enviar_mensaje(f"⏰ En 1 día es festivo: {nombre} — {fecha_festivo}")
+            enviar_mensaje(f"⏰ Tomorrow is holiday {nombre} — {fecha_festivo}")
+
+        # Si hoy es festivo
+        if fecha_festivo == hoy:
+            nombre = festivo["localName"]
+            enviar_mensaje(f"🎉 ¡Hoy es festivo en Colombia!: {nombre}")
 
 if __name__ == "__main__":
     verificar_festivos()
+
