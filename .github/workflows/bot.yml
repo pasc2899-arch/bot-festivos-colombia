@@ -27,4 +27,4 @@ jobs:
         run: |
           sed -i "s|TU_TOKEN_AQUI|${TOKEN}|g" Colbot.py
           sed -i "s|TU_CHAT_ID_AQUI|${CHAT_ID}|g" Colbot.py
-          python bot.py
+          python Colbot.py
