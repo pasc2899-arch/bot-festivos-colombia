@@ -2,7 +2,7 @@ name: Bot Festivos Colombia
 
 on:
   schedule:
-    - cron: "0 12 * * *"   # corre todos los días a las 7am hora Colombia
+    - cron: "20 12 * * *"   # 7:20am Colombia
   workflow_dispatch:
 
 jobs:
@@ -18,13 +18,10 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar dependencias
-        run: pip install requests
+        run: pip install requests pytz
 
       - name: Ejecutar bot
         env:
           TOKEN: ${{ secrets.TOKEN }}
           CHAT_ID: ${{ secrets.CHAT_ID }}
-        run: |
-          sed -i "s|TU_TOKEN_AQUI|${TOKEN}|g" Colbot.py
-          sed -i "s|TU_CHAT_ID_AQUI|${CHAT_ID}|g" Colbot.py
-          python Colbot.py
+        run: python Colbot.py
