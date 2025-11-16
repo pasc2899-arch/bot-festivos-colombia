@@ -2,7 +2,7 @@ name: Bot Festivos Colombia
 
 on:
   schedule:
-    - cron: "10 01 * * *"   # 8:05am Colombia
+    - cron: "40 13 * * *"   # 8:35am Colombia
   workflow_dispatch:
 
 jobs:
