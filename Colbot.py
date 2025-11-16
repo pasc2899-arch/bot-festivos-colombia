@@ -22,10 +22,9 @@ def verificar_festivos():
 
     for festivo in festivos:
         fecha_festivo = datetime.datetime.strptime(festivo["date"], "%Y-%m-%d").date()
-        if (fecha_festivo - hoy).days == 3:
+        if (fecha_festivo - hoy).days == 1:
             nombre = festivo["localName"]
-            enviar_mensaje(f"⏰ En 3 días es festivo: {nombre} — {fecha_festivo}")
+            enviar_mensaje(f"⏰ En 1 día es festivo: {nombre} — {fecha_festivo}")
 
 if __name__ == "__main__":
-    enviar_mensaje("🔧 Prueba: el bot está funcionando correctamente.")
     verificar_festivos()
