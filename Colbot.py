@@ -29,9 +29,9 @@ def verificar_festivos():
         fecha_festivo = datetime.datetime.strptime(festivo["date"], "%Y-%m-%d").date()
 
         # Si falta 1 día
-        if (fecha_festivo - hoy).days == 1:
+        if (fecha_festivo - hoy).days == 3:
             nombre = festivo["localName"]
-            enviar_mensaje(f"⏰ Tomorrow is holiday {nombre} — {fecha_festivo}")
+            enviar_mensaje(f"⏰ It will be a holiday in 3 days Colombia {nombre} — {fecha_festivo}")
 
         # Si hoy es festivo
         if fecha_festivo == hoy:
