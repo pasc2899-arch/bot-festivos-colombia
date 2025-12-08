@@ -6,9 +6,16 @@ import os
 TOKEN = os.getenv("TOKEN")
 CHAT_ID = os.getenv("CHAT_ID")
 
-def obtener_festivos():
+# Lista de países que deseas monitorear
+PAISES = {
+    "CO": "🇨🇴 Colombia",
+    "US": "🇺🇸 Estados Unidos",
+    "AE": "🇦🇪 Emiratos Árabes Unidos"
+}
+
+def obtener_festivos(pais):
     año = datetime.date.today().year
-    url = f"https://date.nager.at/api/v3/PublicHolidays/{año}/CO"
+    url = f"https://date.nager.at/api/v3/PublicHolidays/{año}/{pais}"
     resp = requests.get(url)
     resp.raise_for_status()
     return resp.json()
@@ -19,25 +26,30 @@ def enviar_mensaje(texto):
     requests.post(url, params=params)
 
 def verificar_festivos():
-    # Obtener hora de Colombia
+    # Hora Colombia como referencia
     tz = pytz.timezone("America/Bogota")
     hoy = datetime.datetime.now(tz).date()
 
-    festivos = obtener_festivos()
+    for codigo, nombre_pais in PAISES.items():
+        festivos = obtener_festivos(codigo)
 
-    for festivo in festivos:
-        fecha_festivo = datetime.datetime.strptime(festivo["date"], "%Y-%m-%d").date()
-
-        # Si falta 1 día
-        if (fecha_festivo - hoy).days == 3:
+        for festivo in festivos:
+            fecha_festivo = datetime.datetime.strptime(festivo["date"], "%Y-%m-%d").date()
             nombre = festivo["localName"]
-            enviar_mensaje(f"⏰ It will be a holiday in 3 days Colombia {nombre} — {fecha_festivo}")
 
-        # Si hoy es festivo
-        if fecha_festivo == hoy:
-            nombre = festivo["localName"]
-            enviar_mensaje(f"🎉 ¡Hoy es festivo en Colombia!: {nombre}")
+            # Notificación 3 días antes
+            if (fecha_festivo - hoy).days == 3:
+                enviar_mensaje(
+                    f"⏰ In three days will be holiday in {nombre_pais}: *{nombre}* — {fecha_festivo}"
+                )
+
+            # Notificación el mismo día
+            if fecha_festivo == hoy:
+                enviar_mensaje(
+                    f"🎉 Today is Holiday in {nombre_pais}: *{nombre}* — {fecha_festivo}"
+                )
 
 if __name__ == "__main__":
     verificar_festivos()
+
 
