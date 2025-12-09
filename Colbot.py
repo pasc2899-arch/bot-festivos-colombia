@@ -9,8 +9,8 @@ CHAT_ID = os.getenv("CHAT_ID")
 # Lista de países que deseas monitorear
 PAISES = {
     "CO": "🇨🇴 Colombia",
-    "US": "🇺🇸 Estados Unidos",
-    "AE": "🇦🇪 Emiratos Árabes Unidos"
+    "US": "🇺🇸 United States",
+    "AE": "🇦🇪 United Arab Emirates"
 }
 
 def obtener_festivos(pais):
@@ -43,12 +43,7 @@ def verificar_festivos():
                     f"⏰ In three days will be holiday in {nombre_pais}: *{nombre}* — {fecha_festivo}"
                 )
 
-            # Notificación el mismo día
-            if fecha_festivo == hoy:
-                enviar_mensaje(
-                    f"🎉 Today is Holiday in {nombre_pais}: *{nombre}* — {fecha_festivo}"
-                )
-
+          
 if __name__ == "__main__":
     verificar_festivos()
 
