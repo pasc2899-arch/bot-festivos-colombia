@@ -17,13 +17,15 @@ def obtener_festivos(codigo_pais):
 
     resp = requests.get(url, timeout=10)
 
-    if resp.status_code != 200:
-        raise Exception(f"Error API {codigo_pais}: {resp.status_code}")
+    if resp.status_code == 204:
+        print(f"⚠️ Sin datos de festivos para {codigo_pais}")
+        return []
 
-    try:
-        return resp.json()
-    except Exception:
-        raise Exception(f"Respuesta no válida para {codigo_pais}: {resp.text}")
+    if resp.status_code != 200:
+        print(f"❌ Error API {codigo_pais}: {resp.status_code}")
+        return []
+
+    return resp.json()
 
 def enviar_mensaje(texto):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
@@ -47,10 +49,11 @@ def verificar_festivos():
             if (fecha_festivo - hoy).days == 3:
                 nombre = festivo["localName"]
                 enviar_mensaje(
-                    f"⏰ In 3 days is holiday in {nombre_pais}\n"
+                    f"⏰ In three days will be holiday in {nombre_pais}\n"
                     f"📅 {fecha_festivo}\n"
                     f"🎉 {nombre}"
                 )
+
 
 if __name__ == "__main__":
     enviar_mensaje("✅ Bot ejecutado correctamente desde GitHub Actions")
